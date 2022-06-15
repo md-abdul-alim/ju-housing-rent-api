@@ -3,7 +3,7 @@ from housing.models import HousingModel
 from account.models import CommonUserModel
 
 
-class Tenant(HousingModel):
+class Renter(HousingModel):
     user = models.ForeignKey(CommonUserModel, on_delete=models.PROTECT, blank=False, null=False)
     previous_house_owner = models.ForeignKey(CommonUserModel, on_delete=models.PROTECT, blank=True, null=True, related_name='previous_house_owner')
     present_house_owner = models.ForeignKey(CommonUserModel, on_delete=models.PROTECT, blank=True, null=True, related_name='present_house_owner')
@@ -12,9 +12,9 @@ class Tenant(HousingModel):
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = 'Tenant'
-        verbose_name_plural = 'Tenants'
-        db_table = 'tenant'
+        verbose_name = 'Renter'
+        verbose_name_plural = 'Renters'
+        db_table = 'renter'
 
     def __str__(self):
         return self.user.name

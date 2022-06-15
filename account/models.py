@@ -69,7 +69,6 @@ class OtherMembers(HousingModel):
 
 class CommonUserModel(HousingModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
-    name = models.CharField(max_length=255, blank=False, null=False)
     phone = models.CharField(max_length=11, blank=False, null=True)
     email = models.EmailField(max_length=100, blank=False, null=False)
     nid = models.IntegerField(blank=False, null=False)
@@ -94,5 +93,5 @@ class CommonUserModel(HousingModel):
         db_table = 'common_user'
 
     def __str__(self):
-        return self.name
+        return self.user
 

@@ -1,12 +1,12 @@
 from django.db import models
 from housing.models import HousingModel
 from account.models import CommonUserModel
-from tenant.models import Tenant
+from renter.models import Renter
 
 
 class Unit(HousingModel):
     name = models.CharField(max_length=50, blank=False, null=False)
-    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, blank=True, null=True)
+    tenant = models.ForeignKey(Renter, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ['-created_at']
