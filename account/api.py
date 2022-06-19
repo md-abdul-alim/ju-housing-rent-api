@@ -6,7 +6,7 @@ from account.serializers import (
     CustomTokenObtainPairSerializer,
     ChangePasswordSerializer,
     UserSerializer,
-    RegisterSerializer,
+    RegistrationSerializer,
     GroupSerializer
 )
 from rest_framework.generics import (
@@ -32,11 +32,11 @@ class UserListAPI(ListAPIView):
     serializer_class = UserSerializer
 
 
-class RegisterView(CreateAPIView):
+class RegistrationView(CreateAPIView):
     permission_classes = []
     authentication_classes = []
     queryset = User.objects.all()
-    serializer_class = RegisterSerializer
+    serializer_class = RegistrationSerializer
 
 
 class GroupListAPI(ListAPIView):

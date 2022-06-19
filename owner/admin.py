@@ -15,4 +15,4 @@ class AddressAdmin(HousingAdmin):
 
 @admin.register(HouseOwner)
 class HouseOwnerAdmin(HousingAdmin):
-    list_display = ['user', 'address']
+    list_display = ['common_user', 'address']

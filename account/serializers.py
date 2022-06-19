@@ -6,6 +6,7 @@ from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.hashers import make_password
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
+from account.models import CommonUserModel
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -22,6 +23,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'last_name': self.user.last_name})
         data.update({'is_superuser': self.user.is_superuser})
         data.update({'user_type': [group.name for group in Group.objects.filter(user=self.user)]})
+        data.update({'account_complete_status': [status.account_complete_status for status in CommonUserModel.objects.filter(user=self.user)]})
         return data
 
 
@@ -52,7 +54,7 @@ class GroupSerializer(ModelSerializer):
         fields = ('id', 'name')
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class RegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
@@ -61,10 +63,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
     role = serializers.CharField(write_only=True, required=True)
+    phone = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'role', 'password', 'password2')
+        fields = ('first_name', 'last_name', 'phone', 'email', 'role', 'password', 'password2')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
@@ -88,8 +91,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.groups.add(get_group)
-        # get_group.user_set.add(user)
         user.save()
+        CommonUserModel.objects.create(user=user, phone=validated_data['phone'])
 
         return user
 

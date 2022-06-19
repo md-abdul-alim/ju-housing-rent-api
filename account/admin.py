@@ -25,7 +25,7 @@ class OtherMembersAdmin(HousingAdmin):
 
 @admin.register(CommonUserModel)
 class CommonUserModelAdmin(HousingAdmin):
-    list_display = ['user', 'phone', 'email', 'nid', 'passport', 'present_address', 'permanent_address',
+    list_display = ['user', 'phone', 'nid', 'passport', 'present_address', 'permanent_address',
                     'birthday', 'married_status', 'occupation', 'occupation_institution', 'religion',
-                    'education_qualification', 'emergency_contact', 'family_members', 'house_cleaner', 'driver']
+                    'education_qualification', 'account_complete_status']
 

@@ -70,21 +70,21 @@ class OtherMembers(HousingModel):
 class CommonUserModel(HousingModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
     phone = models.CharField(max_length=11, blank=False, null=True)
-    email = models.EmailField(max_length=100, blank=False, null=False)
-    nid = models.IntegerField(blank=False, null=False)
+    nid = models.IntegerField(blank=False, null=True)
     passport = models.CharField(max_length=100, blank=True, null=True)
     present_address = models.CharField(max_length=100, blank=True, null=True)
     permanent_address = models.CharField(max_length=100, blank=True, null=True)
-    birthday = models.DateField()
+    birthday = models.DateField(blank=True, null=True)
     married_status = models.ForeignKey(MarriedStatus, on_delete=models.CASCADE, blank=False, null=True)
     occupation = models.CharField(max_length=255, blank=True, null=True)
     occupation_institution = models.CharField(max_length=255, blank=True, null=True)
     religion = models.CharField(max_length=255, blank=True, null=True)
     education_qualification = models.CharField(max_length=255, blank=True, null=True)
-    emergency_contact = models.ForeignKey(EmergencyContactPerson, on_delete=models.CASCADE, blank=True, null=True)
-    family_members = models.ForeignKey(FamilyMembers, on_delete=models.PROTECT, blank=True, null=True)
-    house_cleaner = models.ForeignKey(OtherMembers, on_delete=models.CASCADE, blank=True, null=True, related_name='house_cleaner')
-    driver = models.ForeignKey(OtherMembers, on_delete=models.CASCADE, blank=True, null=True, related_name='driver')
+    emergency_contact = models.ManyToManyField(EmergencyContactPerson, blank=True, related_name='emergency_contact')
+    family_members = models.ManyToManyField(FamilyMembers, blank=True, related_name='family_members')
+    house_cleaner = models.ManyToManyField(OtherMembers, blank=True, related_name='house_cleaner')
+    driver = models.ManyToManyField(OtherMembers, blank=True, related_name='driver')
+    account_complete_status = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']
@@ -93,5 +93,5 @@ class CommonUserModel(HousingModel):
         db_table = 'common_user'
 
     def __str__(self):
-        return self.user
+        return self.user.first_name
 

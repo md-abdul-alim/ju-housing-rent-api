@@ -38,7 +38,7 @@ class Address(HousingModel):
 
 
 class HouseOwner(HousingModel):
-    user = models.ForeignKey(CommonUserModel, on_delete=models.PROTECT, blank=False, null=False)
+    common_user = models.ForeignKey(CommonUserModel, on_delete=models.PROTECT, blank=False, null=False)
     unit = models.ManyToManyField(Unit, blank=True)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, blank=False, null=False)
 
