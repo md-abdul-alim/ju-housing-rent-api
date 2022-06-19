@@ -1,6 +1,19 @@
 from django.db import models
-from django.contrib.auth.models import User
 from housing.models import HousingModel
+from django.contrib.auth.models import AbstractUser
+
+
+class Religion(HousingModel):
+    name = models.CharField(max_length=255, blank=False, null=False)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Religion'
+        verbose_name_plural = 'Religions'
+        db_table = 'religion'
+
+    def __str__(self):
+        return self.name
 
 
 class MarriedStatus(HousingModel):
@@ -67,8 +80,7 @@ class OtherMembers(HousingModel):
         return self.name
 
 
-class CommonUserModel(HousingModel):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+class User(AbstractUser, HousingModel):
     phone = models.CharField(max_length=11, blank=False, null=True)
     nid = models.IntegerField(blank=False, null=True)
     passport = models.CharField(max_length=100, blank=True, null=True)
@@ -78,20 +90,23 @@ class CommonUserModel(HousingModel):
     married_status = models.ForeignKey(MarriedStatus, on_delete=models.CASCADE, blank=False, null=True)
     occupation = models.CharField(max_length=255, blank=True, null=True)
     occupation_institution = models.CharField(max_length=255, blank=True, null=True)
-    religion = models.CharField(max_length=255, blank=True, null=True)
+    religion = models.ForeignKey(Religion, on_delete=models.PROTECT, blank=True, null=True)
     education_qualification = models.CharField(max_length=255, blank=True, null=True)
-    emergency_contact = models.ManyToManyField(EmergencyContactPerson, blank=True, related_name='emergency_contact')
+    emergency_contact = models.ManyToManyField(EmergencyContactPerson, blank=True, related_name='emergency_contacts')
     family_members = models.ManyToManyField(FamilyMembers, blank=True, related_name='family_members')
-    house_cleaner = models.ManyToManyField(OtherMembers, blank=True, related_name='house_cleaner')
-    driver = models.ManyToManyField(OtherMembers, blank=True, related_name='driver')
+    cleaner = models.ManyToManyField(OtherMembers, blank=True, related_name='cleaners')
+    driver = models.ManyToManyField(OtherMembers, blank=True, related_name='drivers')
+    owner_status = models.BooleanField(default=False)
+    renter_status = models.BooleanField(default=False)
+    admin_status = models.BooleanField(default=False)
     account_complete_status = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = 'Common User'
-        verbose_name_plural = 'Common Users'
-        db_table = 'common_user'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+        db_table = 'user'
 
     def __str__(self):
-        return self.user.first_name
+        return self.username
 

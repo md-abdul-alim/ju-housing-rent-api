@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from account.models import User
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import Group
 

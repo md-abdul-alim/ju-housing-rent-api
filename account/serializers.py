@@ -1,12 +1,11 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
+from account.models import User
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.hashers import make_password
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-from account.models import CommonUserModel
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -15,15 +14,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
-
-        # Custom data you want to include
         data.update({'user': self.user.username})
         data.update({'id': self.user.id})
         data.update({'first_name': self.user.first_name})
         data.update({'last_name': self.user.last_name})
         data.update({'is_superuser': self.user.is_superuser})
         data.update({'user_type': [group.name for group in Group.objects.filter(user=self.user)]})
-        data.update({'account_complete_status': [status.account_complete_status for status in CommonUserModel.objects.filter(user=self.user)]})
+        data.update({'account_complete_status': self.user.account_complete_status})
         return data
 
 
@@ -86,13 +83,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
+            phone=validated_data['phone'],
             is_active=True
         )
 
         user.set_password(validated_data['password'])
         user.groups.add(get_group)
         user.save()
-        CommonUserModel.objects.create(user=user, phone=validated_data['phone'])
 
         return user
 
