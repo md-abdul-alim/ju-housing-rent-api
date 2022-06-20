@@ -4,7 +4,7 @@ from account.models import User
 
 
 class Renter(HousingModel):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     previous_house_owner = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, related_name='previous_house_owner')
     present_house_owner = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, related_name='present_house_owner')
     reason_of_house_change = models.TextField(blank=True, null=True)
@@ -17,7 +17,7 @@ class Renter(HousingModel):
         db_table = 'renter'
 
     def __str__(self):
-        return self.user.name
+        return self.user.username
 
 
 

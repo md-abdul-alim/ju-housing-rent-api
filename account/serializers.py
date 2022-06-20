@@ -2,6 +2,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import Group
 from account.models import User
+from owner.models import Owner
+from renter.models import Renter
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.hashers import make_password
 from rest_framework.validators import UniqueValidator
@@ -39,7 +41,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UserSerializer(ModelSerializer):
+class UserEmailSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email')
@@ -89,7 +91,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.groups.add(get_group)
+
+        if get_group == 'Owner':
+            Owner.objects.create(user=user)
+            user.owner_status = True
+        else:
+            Renter.objects.create(user=user)
+            user.renter_status = True
+
         user.save()
 
         return user
+
+
+class UserSerializer(ModelSerializer):
+    married_status = serializers.CharField(source='married_status.name')
+    religion = serializers.CharField(source='religion.name')
+
+    class Meta:
+        model = User
+        fields = ('id', 'get_full_name', 'email', 'phone', 'nid', 'passport', 'birthday', 'present_address',
+                  'permanent_address', 'married_status', 'occupation', 'occupation_institution', 'religion',
+                  'education_qualification', 'account_complete_status')
 

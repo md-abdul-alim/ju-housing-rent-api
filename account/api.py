@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from account.serializers import (
     CustomTokenObtainPairSerializer,
     ChangePasswordSerializer,
-    UserSerializer,
+    UserEmailSerializer,
     RegistrationSerializer,
     GroupSerializer
 )
@@ -29,14 +29,7 @@ class UserListAPI(ListAPIView):
     permission_classes = []
     authentication_classes = []
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class RegistrationView(CreateAPIView):
-    permission_classes = []
-    authentication_classes = []
-    queryset = User.objects.all()
-    serializer_class = RegistrationSerializer
+    serializer_class = UserEmailSerializer
 
 
 class GroupListAPI(ListAPIView):
