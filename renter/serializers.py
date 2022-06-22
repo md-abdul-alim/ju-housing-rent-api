@@ -1,11 +1,11 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from renter.models import Renter
-from account.serializers import UserSerializer
+from account.serializers import UserProfileSerializer
 
 
 class RenterSerializer(ModelSerializer):
-    user = UserSerializer(many=False)
+    user = UserProfileSerializer(many=False)
     previous_house_owner = serializers.CharField(source='previous_house_owner.get_full_name')
     present_house_owner = serializers.CharField(source='present_house_owner.get_full_name')
 

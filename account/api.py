@@ -1,4 +1,4 @@
-from account.models import User
+from account.models import User, MarriedStatus, Religion
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import Group
 
@@ -7,7 +7,7 @@ from account.serializers import (
     ChangePasswordSerializer,
     UserEmailSerializer,
     RegistrationSerializer,
-    GroupSerializer
+    GroupSerializer, MarriedStatusSerializer, ReligionSerializer
 )
 from rest_framework.generics import (
     UpdateAPIView,
@@ -37,4 +37,16 @@ class GroupListAPI(ListAPIView):
     authentication_classes = []
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class MarriedStatusAPI(ListAPIView):
+    permission_classes = []
+    queryset = MarriedStatus.objects.all()
+    serializer_class = MarriedStatusSerializer
+
+
+class ReligionAPI(ListAPIView):
+    permission_classes = []
+    queryset = Religion.objects.all()
+    serializer_class = ReligionSerializer
 

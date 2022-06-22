@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import Group
-from account.models import User
+from account.models import User, MarriedStatus, Religion, FamilyMembers, OtherMembers, EmergencyContactPerson
 from owner.models import Owner
 from renter.models import Renter
 from rest_framework.serializers import ModelSerializer
@@ -103,14 +103,47 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         return user
 
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
-class UserSerializer(ModelSerializer):
-    married_status = serializers.CharField(source='married_status.name')
-    religion = serializers.CharField(source='religion.name')
+
+class MarriedStatusSerializer(ModelSerializer):
+    class Meta:
+        model = MarriedStatus
+        fields = ('id', 'name')
+
+
+class ReligionSerializer(ModelSerializer):
+    class Meta:
+        model = Religion
+        fields = ('id', 'name')
+
+
+class UserProfileSerializer(ModelSerializer):
+    married_status_name = serializers.CharField(source='married_status.name')
+    religion_name = serializers.CharField(source='religion.name')
 
     class Meta:
         model = User
-        fields = ('id', 'get_full_name', 'email', 'phone', 'nid', 'passport', 'birthday', 'present_address',
-                  'permanent_address', 'married_status', 'occupation', 'occupation_institution', 'religion',
-                  'education_qualification', 'account_complete_status')
+        fields = ('id', 'first_name', 'last_name', 'get_full_name', 'email', 'phone', 'nid', 'passport', 'birthday',
+                  'present_address', 'permanent_address', 'married_status', 'married_status_name', 'occupation',
+                  'occupation_institution', 'religion', 'religion_name', 'education_qualification',
+                  'account_complete_status')
 
+
+class FamilyMembersSerializer(ModelSerializer):
+    class Meta:
+        model = FamilyMembers
+        fields = ('id', 'name', 'age', 'phone', 'relation', 'occupation')
+
+
+class EmergencyContactPersonSerializer(ModelSerializer):
+    class Meta:
+        model = EmergencyContactPerson
+        fields = ('id', 'name', 'phone', 'relation', 'address')
+
+
+class OtherMembersSerializer(ModelSerializer):
+    class Meta:
+        model = OtherMembers
+        fields = ('id', 'name', 'age', 'phone', 'nid', 'present_address', 'permanent_address')
