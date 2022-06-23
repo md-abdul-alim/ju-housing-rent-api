@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
 )
 from account.api import CustomTokenObtainPairView, ChangePasswordView, UserListAPI, GroupListAPI,\
     MarriedStatusAPI, ReligionAPI
-from account.views import ProfileAPI, ProfileFamily
+from account.views import ProfileAPI, ProfileFamilyMember, ProfileEmergencyContact, ProfileOtherMember
 
 urlpatterns = [
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -17,14 +17,19 @@ urlpatterns = [
     path('registration/', ProfileAPI.as_view(), name="registration"),  # both for owner & renter
     path('profile/', ProfileAPI.as_view()),
     path('profile/update/', ProfileAPI.as_view()),
-    path('profile/family/member/create/', ProfileFamily.as_view()),
-    path('profile/family/member/update/', ProfileFamily.as_view()),
-    path('profile/family/member/list/', ProfileFamily.as_view()),
-    path('profile/family/member/delete/', ProfileFamily.as_view()),
-    path('profile/emergency/contact/update/', ProfileAPI.as_view()),
-    path('profile/emergency/contact/delete/', ProfileAPI.as_view()),
-    path('profile/home/cleaner/update/', ProfileAPI.as_view()),
-    path('profile/home/cleaner/delete/', ProfileAPI.as_view()),
-    path('profile/home/driver/update/', ProfileAPI.as_view()),
-    path('profile/home/driver/delete/', ProfileAPI.as_view()),
+
+    path('profile/family/member/create/', ProfileFamilyMember.as_view()),
+    path('profile/family/member/update/', ProfileFamilyMember.as_view()),
+    path('profile/family/member/list/', ProfileFamilyMember.as_view()),
+    path('profile/family/member/delete/', ProfileFamilyMember.as_view()),
+
+    path('profile/emergency/contact/create/', ProfileEmergencyContact.as_view()),
+    path('profile/emergency/contact/update/', ProfileEmergencyContact.as_view()),
+    path('profile/emergency/contact/list/', ProfileEmergencyContact.as_view()),
+    path('profile/emergency/contact/delete/', ProfileEmergencyContact.as_view()),
+
+    path('profile/other/member/create/', ProfileOtherMember.as_view()),
+    path('profile/other/member/update/', ProfileOtherMember.as_view()),
+    path('profile/other/member/list/', ProfileOtherMember.as_view()),
+    path('profile/other/member/delete/', ProfileOtherMember.as_view()),
 ]

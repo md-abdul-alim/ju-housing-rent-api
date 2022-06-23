@@ -1,6 +1,6 @@
 from django.contrib import admin
 from housing.admin import HousingAdmin
-from account.models import MarriedStatus, EmergencyContactPerson, FamilyMembers, OtherMembers, User, Religion
+from account.models import MarriedStatus, EmergencyContact, FamilyMember, OtherMember, User, Religion
 
 from account.models import User
 from django.http import HttpResponseRedirect
@@ -44,18 +44,18 @@ class MarriedStatusAdmin(HousingAdmin):
     list_display = ['name']
 
 
-@admin.register(EmergencyContactPerson)
+@admin.register(EmergencyContact)
 class EmergencyContactPersonAdmin(HousingAdmin):
     list_display = ['name', 'phone', 'relation', 'address']
 
 
-@admin.register(FamilyMembers)
-class FamilyMembersAdmin(HousingAdmin):
+@admin.register(FamilyMember)
+class FamilyMemberAdmin(HousingAdmin):
     list_display = ['name', 'age', 'phone', 'relation', 'occupation']
 
 
-@admin.register(OtherMembers)
-class OtherMembersAdmin(HousingAdmin):
+@admin.register(OtherMember)
+class OtherMemberAdmin(HousingAdmin):
     list_display = ['name', 'age', 'phone', 'nid', 'present_address', 'permanent_address']
 
 

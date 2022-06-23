@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import Group
-from account.models import User, MarriedStatus, Religion, FamilyMembers, OtherMembers, EmergencyContactPerson
+from account.models import User, MarriedStatus, Religion, FamilyMember, OtherMember, EmergencyContact
 from owner.models import Owner
 from renter.models import Renter
 from rest_framework.serializers import ModelSerializer
@@ -131,19 +131,19 @@ class UserProfileSerializer(ModelSerializer):
                   'account_complete_status')
 
 
-class FamilyMembersSerializer(ModelSerializer):
+class FamilyMemberSerializer(ModelSerializer):
     class Meta:
-        model = FamilyMembers
+        model = FamilyMember
         fields = ('id', 'name', 'age', 'phone', 'relation', 'occupation')
 
 
-class EmergencyContactPersonSerializer(ModelSerializer):
+class EmergencyContactSerializer(ModelSerializer):
     class Meta:
-        model = EmergencyContactPerson
+        model = EmergencyContact
         fields = ('id', 'name', 'phone', 'relation', 'address')
 
 
-class OtherMembersSerializer(ModelSerializer):
+class OtherMemberSerializer(ModelSerializer):
     class Meta:
-        model = OtherMembers
+        model = OtherMember
         fields = ('id', 'name', 'age', 'phone', 'nid', 'present_address', 'permanent_address')

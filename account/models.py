@@ -29,7 +29,7 @@ class MarriedStatus(HousingModel):
         return self.name
 
 
-class EmergencyContactPerson(HousingModel):
+class EmergencyContact(HousingModel):
     name = models.CharField(max_length=255, blank=False, null=False)
     phone = models.CharField(max_length=11, blank=False, null=False)
     relation = models.CharField(max_length=255, blank=True, null=True)
@@ -45,7 +45,7 @@ class EmergencyContactPerson(HousingModel):
         return self.name
 
 
-class FamilyMembers(HousingModel):
+class FamilyMember(HousingModel):
     name = models.CharField(max_length=255, blank=False, null=True)
     age = models.IntegerField(blank=True, null=True)
     phone = models.CharField(max_length=11, blank=True, null=True)
@@ -62,7 +62,7 @@ class FamilyMembers(HousingModel):
         return self.name
 
 
-class OtherMembers(HousingModel):
+class OtherMember(HousingModel):
     name = models.CharField(max_length=255, blank=False, null=True)
     age = models.IntegerField(blank=True, null=True)
     phone = models.CharField(max_length=11, blank=True, null=True)
@@ -92,10 +92,10 @@ class User(AbstractUser, HousingModel):
     occupation_institution = models.CharField(max_length=255, blank=True, null=True)
     religion = models.ForeignKey(Religion, on_delete=models.PROTECT, blank=True, null=True)
     education_qualification = models.CharField(max_length=255, blank=True, null=True)
-    emergency_contact = models.ManyToManyField(EmergencyContactPerson, blank=True, related_name='emergency_contacts')
-    family_members = models.ManyToManyField(FamilyMembers, blank=True, related_name='family_members')
-    cleaner = models.ManyToManyField(OtherMembers, blank=True, related_name='cleaners')
-    driver = models.ManyToManyField(OtherMembers, blank=True, related_name='drivers')
+    emergency_contact = models.ManyToManyField(EmergencyContact, blank=True, related_name='emergency_contacts')
+    family_member = models.ManyToManyField(FamilyMember, blank=True, related_name='family_members')
+    cleaner = models.ManyToManyField(OtherMember, blank=True, related_name='cleaners')
+    driver = models.ManyToManyField(OtherMember, blank=True, related_name='drivers')
     owner_status = models.BooleanField(default=False)
     renter_status = models.BooleanField(default=False)
     admin_status = models.BooleanField(default=False)
