@@ -6,7 +6,14 @@ from renter.models import Renter
 
 class Unit(HousingModel):
     name = models.CharField(max_length=50, blank=False, null=False)
-    renter = models.ForeignKey(Renter, on_delete=models.CASCADE, blank=True, null=True)
+    type = models.CharField(max_length=100, blank=True, null=True)
+    square_feet = models.CharField(max_length=50, blank=True, null=True)
+    bedrooms = models.IntegerField(default=0)
+    rent = models.IntegerField(default=0)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    status = models.BooleanField(default=False)
+    renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -20,8 +27,8 @@ class Unit(HousingModel):
 
 
 class Owner(HousingModel):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
-    unit = models.ManyToManyField(Unit, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
+    unit = models.ManyToManyField(Unit, blank=True, related_name='units')
 
     class Meta:
         ordering = ['-created_at']

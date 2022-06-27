@@ -4,13 +4,31 @@ from rest_framework.response import Response
 from rest_framework import status
 from account.models import User, FamilyMember, EmergencyContact, OtherMember
 from renter.models import Renter
+from owner.models import Owner
 from django.contrib.auth.hashers import make_password
 from renter.serializers import RenterSerializer
+from owner.serializers import OwnerSerializer
 from account.serializers import RegistrationSerializer, FamilyMemberSerializer, EmergencyContactSerializer,\
     OtherMemberSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import QueryDict
+
+
+class Registration(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = RegistrationSerializer(data=request.data)
+        if User.objects.filter(username=request.data['email']).exists():
+            msg = {'success': False, 'message': 'This User is already exist.'}
+            return Response(msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'success': True}, status=status.HTTP_200_OK)
+        return Response({'success': False, "msg": str(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProfileAPI(APIView):
@@ -25,21 +43,12 @@ class ProfileAPI(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def post(self, request):
-        serializer = RegistrationSerializer(data=request.data)
-        if User.objects.filter(username=request.data['email']).exists():
-            msg = {'success': False, 'message': 'This User is already exist.'}
-            return Response(msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'success': True}, status=status.HTTP_200_OK)
-        return Response({'success': False, "msg": str(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
-
     def get(self, request, format=None):
         user = self.get_object(request.user.pk)
         if request.user.owner_status:
-            pass
+            queryset = Owner.objects.get(user=user)
+            serializer = OwnerSerializer(queryset, many=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         elif request.user.renter_status:
             queryset = Renter.objects.get(user=user)
             serializer = RenterSerializer(queryset, many=False)

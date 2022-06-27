@@ -6,8 +6,6 @@ from account.serializers import UserProfileSerializer
 
 class RenterSerializer(ModelSerializer):
     user = UserProfileSerializer(many=False)
-    previous_house_owner = serializers.CharField(source='previous_house_owner.get_full_name')
-    present_house_owner = serializers.CharField(source='present_house_owner.get_full_name')
 
     class Meta:
         model = Renter

@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
 )
 from account.api import CustomTokenObtainPairView, ChangePasswordView, UserListAPI, GroupListAPI,\
     MarriedStatusAPI, ReligionAPI
-from account.views import ProfileAPI, ProfileFamilyMember, ProfileEmergencyContact, ProfileOtherMember
+from account.views import ProfileAPI, ProfileFamilyMember, ProfileEmergencyContact, ProfileOtherMember, Registration
 
 urlpatterns = [
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -14,7 +14,7 @@ urlpatterns = [
     path('married/status/list/', MarriedStatusAPI.as_view()),
     path('religion/list/', ReligionAPI.as_view()),
     path('change_password/<str:pk>/', ChangePasswordView.as_view()),
-    path('registration/', ProfileAPI.as_view(), name="registration"),  # both for owner & renter
+    path('registration/', Registration.as_view(), name="registration"),  # both for owner & renter
     path('profile/', ProfileAPI.as_view()),
     path('profile/update/', ProfileAPI.as_view()),
 

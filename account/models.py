@@ -87,7 +87,7 @@ class User(AbstractUser, HousingModel):
     present_address = models.CharField(max_length=100, blank=True, null=True)
     permanent_address = models.CharField(max_length=100, blank=True, null=True)
     birthday = models.DateTimeField(blank=True, null=True)
-    married_status = models.ForeignKey(MarriedStatus, on_delete=models.CASCADE, blank=False, null=True)
+    married_status = models.ForeignKey(MarriedStatus, on_delete=models.PROTECT, blank=True, null=True)
     occupation = models.CharField(max_length=255, blank=True, null=True)
     occupation_institution = models.CharField(max_length=255, blank=True, null=True)
     religion = models.ForeignKey(Religion, on_delete=models.PROTECT, blank=True, null=True)

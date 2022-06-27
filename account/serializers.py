@@ -92,7 +92,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.groups.add(get_group)
 
-        if get_group == 'Owner':
+        if str(get_group) == 'Owner':
             Owner.objects.create(user=user)
             user.owner_status = True
         else:
@@ -120,14 +120,12 @@ class ReligionSerializer(ModelSerializer):
 
 
 class UserProfileSerializer(ModelSerializer):
-    married_status_name = serializers.CharField(source='married_status.name')
-    religion_name = serializers.CharField(source='religion.name')
 
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'get_full_name', 'email', 'phone', 'nid', 'passport', 'birthday',
-                  'present_address', 'permanent_address', 'married_status', 'married_status_name', 'occupation',
-                  'occupation_institution', 'religion', 'religion_name', 'education_qualification',
+                  'present_address', 'permanent_address', 'married_status', 'occupation',
+                  'occupation_institution', 'religion', 'education_qualification',
                   'account_complete_status')
 
 
