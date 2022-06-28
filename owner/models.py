@@ -4,6 +4,7 @@ from account.models import User
 from renter.models import Renter
 from housing.utils import unique_code_generator
 from django.db.models.signals import pre_save
+from django.utils import timezone
 
 
 class Unit(HousingModel):
@@ -16,17 +17,27 @@ class Unit(HousingModel):
     description = models.TextField(blank=True, null=True)
     code = models.CharField(max_length=9, blank=True)
     status = models.BooleanField(default=False)
-    renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True)
+    check_in_date = models.DateTimeField(blank=True, null=True)
+    check_in_renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True, related_name='check_in_renter')
+    check_out_date = models.DateTimeField(blank=True, null=True)
+    check_out_renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True, related_name='check_out_renter')
 
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'Unit'
         verbose_name_plural = 'Units'
-        unique_together = ('name', 'renter',)
         db_table = 'unit'
 
     def __str__(self):
         return self.name
+
+    @property
+    def check_in(self):
+        return str(self.check_in_date).split(' ')[0]
+
+    @property
+    def check_out(self):
+        return str(self.check_out_date).split(' ')[0]
 
 
 class Owner(HousingModel):

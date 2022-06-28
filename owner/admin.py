@@ -5,7 +5,8 @@ from owner.models import Unit, Owner
 
 @admin.register(Unit)
 class UnitAdmin(HousingAdmin):
-    list_display = ['name', 'type', 'square_feet', 'bedrooms', 'rent', 'code', 'status', 'renter']
+    list_display = ['name', 'type', 'square_feet', 'bedrooms', 'rent', 'code',
+                    'status', 'check_in_renter', 'check_out_renter']
 
 
 @admin.register(Owner)

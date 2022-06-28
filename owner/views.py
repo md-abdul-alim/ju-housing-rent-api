@@ -20,17 +20,29 @@ def to_let_list(queryset):
         query_dict = QueryDict(mutable=True)
         query_dict['id'] = unit_dict_['id']
         query_dict['name'] = unit_dict_['name']
+        query_dict['code'] = unit_dict_['code']
         query_dict['type'] = unit_dict_['type']
         query_dict['square_feet'] = unit_dict_['square_feet']
         query_dict['bedrooms'] = unit_dict_['bedrooms']
         query_dict['rent'] = unit_dict_['rent']
         query_dict['address'] = unit_dict_['address']
         query_dict['description'] = unit_dict_['description']
-        query_dict['renter'] = unit_dict_['renter']
-        if unit_dict_['renter']:
-            query_dict['renter_name'] = [renter.user.username for renter in Renter.objects.filter(id=unit_dict_['renter'])]
+        query_dict['check_in'] = unit_dict_['check_in']
+        query_dict['check_in_date'] = unit_dict_['check_in_date']
+        query_dict['check_out'] = unit_dict_['check_out']
+        query_dict['check_out_date'] = unit_dict_['check_out_date']
+        query_dict['check_in_renter'] = unit_dict_['check_in_renter']
+        query_dict['check_out_renter'] = unit_dict_['check_out_renter']
+        if unit_dict_['check_in_renter']:
+            query_dict['check_in_renter_name'] = [renter.user.username for renter in Renter.objects.filter(id=unit_dict_['check_in_renter'])]
         else:
-            query_dict['renter_name'] = 'None'
+            query_dict['check_in_renter_name'] = 'None'
+
+        if unit_dict_['check_out_renter']:
+            query_dict['check_out_renter_name'] = [renter.user.username for renter in
+                                                  Renter.objects.filter(id=unit_dict_['check_out_renter'])]
+        else:
+            query_dict['check_out_renter_name'] = 'None'
 
         if unit_dict_['status']:
             query_dict['status'] = "True"
