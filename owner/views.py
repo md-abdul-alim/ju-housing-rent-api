@@ -27,12 +27,15 @@ def to_let_list(queryset):
         query_dict['rent'] = unit_dict_['rent']
         query_dict['address'] = unit_dict_['address']
         query_dict['description'] = unit_dict_['description']
+        query_dict['to_let_from'] = unit_dict_['to_let_from']
+        query_dict['to_let_date'] = unit_dict_['to_let_date']
         query_dict['check_in'] = unit_dict_['check_in']
         query_dict['check_in_date'] = unit_dict_['check_in_date']
         query_dict['check_out'] = unit_dict_['check_out']
         query_dict['check_out_date'] = unit_dict_['check_out_date']
         query_dict['check_in_renter'] = unit_dict_['check_in_renter']
         query_dict['check_out_renter'] = unit_dict_['check_out_renter']
+        query_dict['check_in_permission_nid'] = unit_dict_['check_in_permission_nid']
         if unit_dict_['check_in_renter']:
             query_dict['check_in_renter_name'] = [renter.user.username for renter in Renter.objects.filter(id=unit_dict_['check_in_renter'])]
         else:
@@ -86,6 +89,7 @@ class ToLet(APIView):
         rent = request.data["rent"]
         address = request.data["address"]
         description = request.data["description"]
+        to_let_from = request.data["to_let_from"]
 
         unit = Unit.objects.create(
             name=name,
@@ -95,6 +99,7 @@ class ToLet(APIView):
             rent=rent,
             address=address,
             description=description,
+            to_let_from=to_let_from,
         )
         unit.save()
         owner.unit.add(unit)
@@ -104,6 +109,8 @@ class ToLet(APIView):
 
     def put(self, request, format=None):
         queryset = Unit.objects.get(id=request.data['id'])
+        if request.data['check_in_permission_nid'] == '' or request.data['check_in_permission_nid'] is None:
+            request.data['check_in_permission_nid'] = 0
         serializer = UnitSerializer(queryset, data=request.data)
         if serializer.is_valid():
             serializer.save()

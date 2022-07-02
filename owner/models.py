@@ -17,15 +17,20 @@ class Unit(HousingModel):
     description = models.TextField(blank=True, null=True)
     code = models.CharField(max_length=9, blank=True)
     status = models.BooleanField(default=False)
+    to_let_from = models.DateTimeField(blank=True, null=True)
     check_in_date = models.DateTimeField(blank=True, null=True)
     check_in_renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True, related_name='check_in_renter')
+    check_in_status = models.BooleanField(default=False)
     check_out_date = models.DateTimeField(blank=True, null=True)
     check_out_renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True, related_name='check_out_renter')
+    check_out_status = models.BooleanField(default=False)
+    check_in_permission_nid = models.IntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'Unit'
         verbose_name_plural = 'Units'
+        unique_together = ('check_in_renter', 'check_out_renter',)
         db_table = 'unit'
 
     def __str__(self):
@@ -38,6 +43,10 @@ class Unit(HousingModel):
     @property
     def check_out(self):
         return str(self.check_out_date).split(' ')[0]
+
+    @property
+    def to_let_date(self):
+        return str(self.to_let_from).split(' ')[0]
 
 
 class Owner(HousingModel):

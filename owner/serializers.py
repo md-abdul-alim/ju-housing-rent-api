@@ -15,6 +15,9 @@ class OwnerSerializer(ModelSerializer):
 class UnitSerializer(ModelSerializer):
     class Meta:
         model = Unit
-        fields = ('id', 'name', 'code', 'type', 'square_feet', 'bedrooms', 'rent', 'address', 'description',
-                  'status', 'check_in', 'check_in_date', 'check_in_renter', 'check_out', 'check_out_date', 'check_out_renter')
+        fields = ('id', 'name', 'code', 'type', 'square_feet', 'bedrooms', 'rent', 'address', 'description', 'status',
+                  'to_let_from', 'to_let_date', 'check_in', 'check_in_date', 'check_in_renter', 'check_out',
+                  'check_out_date', 'check_out_renter', 'check_in_permission_nid')
+
+
 

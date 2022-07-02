@@ -22,7 +22,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'last_name': self.user.last_name})
         data.update({'is_superuser': self.user.is_superuser})
         data.update({'user_type': [group.name for group in Group.objects.filter(user=self.user)]})
-        data.update({'account_complete_status': self.user.account_complete_status})
+        data.update({'nid': self.user.nid})
         return data
 
 
@@ -145,3 +145,10 @@ class OtherMemberSerializer(ModelSerializer):
     class Meta:
         model = OtherMember
         fields = ('id', 'name', 'age', 'phone', 'nid', 'present_address', 'permanent_address')
+
+
+class RenterNidSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'nid')
+

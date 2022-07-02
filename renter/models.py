@@ -20,6 +20,24 @@ class Renter(HousingModel):
         return self.user.username
 
 
+class CheckIn(HousingModel):
+    renter = models.ForeignKey(Renter, on_delete=models.PROTECT, blank=True, null=True)
+    unit_code = models.IntegerField(blank=True, null=True)
+    check_in_date = models.DateTimeField(blank=True, null=True)
+    remark = models.CharField(max_length=255, blank=True, null=True)
+    status = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Check In'
+        verbose_name_plural = 'Check Ins'
+        db_table = 'checkin'
+
+    def __str__(self):
+        return self.renter.user.username
+
+    @property
+    def check_in(self):
+        return str(self.check_in_date).split(' ')[0]
 
 

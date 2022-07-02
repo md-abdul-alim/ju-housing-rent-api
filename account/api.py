@@ -7,7 +7,7 @@ from account.serializers import (
     ChangePasswordSerializer,
     UserEmailSerializer,
     RegistrationSerializer,
-    GroupSerializer, MarriedStatusSerializer, ReligionSerializer
+    GroupSerializer, MarriedStatusSerializer, ReligionSerializer, RenterNidSerializer
 )
 from rest_framework.generics import (
     UpdateAPIView,
@@ -49,4 +49,10 @@ class ReligionAPI(ListAPIView):
     permission_classes = []
     queryset = Religion.objects.all()
     serializer_class = ReligionSerializer
+
+
+class RenterNidAPI(ListAPIView):
+    permission_classes = []
+    queryset = User.objects.filter(renter_status=True)
+    serializer_class = RenterNidSerializer
 
