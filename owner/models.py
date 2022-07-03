@@ -12,6 +12,7 @@ class Unit(HousingModel):
     type = models.CharField(max_length=100, blank=True, null=True)
     square_feet = models.CharField(max_length=50, blank=True, null=True)
     bedrooms = models.IntegerField(default=0)
+    phone = models.CharField(max_length=14, blank=True, null=True)
     rent = models.IntegerField(default=0)
     address = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)

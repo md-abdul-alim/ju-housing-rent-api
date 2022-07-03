@@ -70,20 +70,18 @@ class CheckInAPI(APIView):
 
             if Unit.objects.filter(check_in_renter=renter).exists():
                 unit_checkout = Unit.objects.get(check_in_renter=renter)
-                # unit_checkout.check_out_date = check_in_date
-                # unit_checkout.check_out_renter = renter
-                # unit_checkout.check_out_status = True
-                # unit_checkout.save()
+                unit_checkout.check_out_date = check_in_date
+                unit_checkout.check_out_renter = renter
+                unit_checkout.check_out_status = True
+                unit_checkout.save()
 
             if Unit.objects.filter(code=unit_code).exists():
                 unit_checkin = Unit.objects.get(code=unit_code)
 
                 if int(unit_checkin.check_in_permission_nid) == int(renter.user.nid):
-                    # unit_checkin.check_in_date = check_in_date
-                    # unit_checkin.check_in_renter = renter
-                    # unit_checkin.check_in_status = True
-                    # unit_checkin.save()
-                    pass
+                    unit_checkin.check_in_status = True
+                    unit_checkin.status = False
+                    unit_checkin.save()
 
         return Response({'success': True}, status=status.HTTP_200_OK)
 
