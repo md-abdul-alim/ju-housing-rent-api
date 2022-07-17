@@ -3,7 +3,7 @@ from housing.models import HousingModel
 from account.models import User
 from renter.models import Renter
 from housing.utils import unique_code_generator
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 from django.utils import timezone
 
 
@@ -69,5 +69,11 @@ def unit_pre_save(sender, instance, *args, **kwargs):
         instance.code = unique_code_generator(instance)
 
 
+def unit_pre_delete(sender, instance, *args, **kwargs):
+    all_units = instance.unit.all()
+    all_units.delete()
+
+
 pre_save.connect(unit_pre_save, sender=Unit)
+pre_delete.connect(unit_pre_delete, sender=Owner)
 

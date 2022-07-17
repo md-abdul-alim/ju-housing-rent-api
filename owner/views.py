@@ -159,6 +159,9 @@ class ToLet(APIView):
         description = request.data["description"]
         to_let_from = request.data["to_let_from"]
 
+        if request.data['check_in_permission_nid'] == '' or request.data['check_in_permission_nid'] is None:
+            request.data['check_in_permission_nid'] = 0
+
         unit = Unit.objects.create(
             name=name,
             type=type_,
@@ -169,6 +172,7 @@ class ToLet(APIView):
             address=address,
             description=description,
             to_let_from=to_let_from,
+            check_in_permission_nid=request.data['check_in_permission_nid']
         )
         unit.save()
         owner.unit.add(unit)
@@ -219,13 +223,18 @@ class CheckInAcceptReject(APIView):
 
     def put(self, request, id, format=None):
         unit_object = Unit.objects.get(code=id)
-        if unit_object.check_out_status:
+        if unit_object.check_out_status or unit_object.check_in_renter==None:
             check_in_object = CheckIn.objects.get(unit_code=id)
+            renter_in_object = Renter.objects.get(pk=check_in_object.renter.pk)
+            renter_in_object.present_house_owner = request.user
+            renter_in_object.rent_of_date = check_in_object.check_in_date
             unit_object.check_in_date = check_in_object.check_in_date
             unit_object.check_in_renter = check_in_object.renter
             unit_object.check_in_status = False
+            unit_object.check_out_status = False
             unit_object.check_in_permission_nid = 0
             unit_object.save()
+            renter_in_object.save()
             check_in_object.delete()
             return Response({'success': True}, status=status.HTTP_200_OK)
         return Response({'success': False, 'message': "Unit not found"}, status=status.HTTP_403_FORBIDDEN)

@@ -9,6 +9,8 @@ class Renter(HousingModel):
     present_house_owner = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, related_name='present_house_owner')
     reason_of_house_change = models.TextField(blank=True, null=True)
     rent_of_date = models.DateField(blank=True, null=True)
+    check_out_admin_approve = models.BooleanField(default=False)
+    check_in_admin_approve = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']
@@ -18,6 +20,14 @@ class Renter(HousingModel):
 
     def __str__(self):
         return self.user.username
+
+    # @property
+    # def present_house_owner_name(self):
+    #     return self.present_house_owner.user
+
+    # @property
+    # def previous_house_owner_name(self):
+    #     return "{}-{}".format(self.previous_house_owner.first_name, self.previous_house_owner.last_name)
 
 
 class CheckIn(HousingModel):

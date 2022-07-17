@@ -124,9 +124,8 @@ class UserProfileSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'get_full_name', 'email', 'phone', 'nid', 'passport', 'birthday',
-                  'present_address', 'permanent_address', 'married_status', 'occupation',
-                  'occupation_institution', 'religion', 'education_qualification',
-                  'account_complete_status')
+                  'present_address', 'permanent_address', 'married_status', 'married_status_name', 'occupation',
+                  'occupation_institution', 'religion', 'religion_name', 'education_qualification', 'birthday_date')
 
 
 class FamilyMemberSerializer(ModelSerializer):

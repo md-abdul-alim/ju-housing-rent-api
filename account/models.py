@@ -1,6 +1,7 @@
 from django.db import models
 from housing.models import HousingModel
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import pre_delete
 
 
 class Religion(HousingModel):
@@ -99,7 +100,6 @@ class User(AbstractUser, HousingModel):
     owner_status = models.BooleanField(default=False)
     renter_status = models.BooleanField(default=False)
     admin_status = models.BooleanField(default=False)
-    account_complete_status = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']
@@ -109,4 +109,42 @@ class User(AbstractUser, HousingModel):
 
     def __str__(self):
         return self.username
+
+    @property
+    def married_status_name(self):
+        return self.married_status.name
+
+    @property
+    def religion_name(self):
+        return self.religion.name
+
+    @property
+    def birthday_date(self):
+        return str(self.birthday).split(' ')[0]
+
+
+def emergency_contact_pre_delete(sender, instance, *args, **kwargs):
+    all_emergency_contacts = instance.emergency_contact.all()
+    all_emergency_contacts.delete()
+
+
+def family_member_pre_delete(sender, instance, *args, **kwargs):
+    all_family_members = instance.family_member.all()
+    all_family_members.delete()
+
+
+def cleaner_pre_delete(sender, instance, *args, **kwargs):
+    all_cleaners = instance.cleaner.all()
+    all_cleaners.delete()
+
+
+def driver_pre_delete(sender, instance, *args, **kwargs):
+    all_drivers = instance.driver.all()
+    all_drivers.delete()
+
+
+pre_delete.connect(emergency_contact_pre_delete, sender=User)
+pre_delete.connect(family_member_pre_delete, sender=User)
+pre_delete.connect(cleaner_pre_delete, sender=User)
+pre_delete.connect(driver_pre_delete, sender=User)
 

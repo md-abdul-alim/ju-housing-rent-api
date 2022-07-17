@@ -9,7 +9,8 @@ class RenterSerializer(ModelSerializer):
 
     class Meta:
         model = Renter
-        fields = ('id', 'user', 'previous_house_owner', 'present_house_owner', 'reason_of_house_change', 'rent_of_date')
+        fields = ('id', 'user', 'previous_house_owner', 'present_house_owner', 'reason_of_house_change',
+                  'check_out_admin_approve', 'check_in_admin_approve', 'rent_of_date')
 
 
 class CheckInSerializer(ModelSerializer):

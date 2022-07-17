@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework import status
-from account.models import User, FamilyMember, EmergencyContact, OtherMember
+from account.models import User, FamilyMember, EmergencyContact, OtherMember, MarriedStatus, Religion
 from renter.models import Renter
 from owner.models import Owner
 from django.contrib.auth.hashers import make_password
@@ -67,6 +67,7 @@ class ProfileAPI(APIView):
         if serializer.is_valid():
             if request.user.email == request.data['email'] or not User.objects.filter(email=request.data['email']).exists():
                 user.username = request.data['email']
+                user.email = request.data['email']
                 user.first_name = request.data['first_name']
                 user.last_name = request.data['last_name']
                 if not (request.data['password'] == '' or request.data['password'] == 'avoid field value'):
@@ -75,8 +76,13 @@ class ProfileAPI(APIView):
                 user.passport = request.data['passport']
                 user.nid = request.data['nid']
                 user.birthday = request.data['birthday']
+                if request.data['married_status']:
+                    user.married_status = MarriedStatus.objects.get(id=request.data['married_status'])
                 user.occupation = request.data['occupation']
                 user.occupation_institution = request.data['occupation_institution']
+                user.education_qualification = request.data['education_qualification']
+                if request.data['religion']:
+                    user.religion = Religion.objects.get(id=request.data['religion'])
                 user.present_address = request.data['present_address']
                 user.permanent_address = request.data['permanent_address']
                 user.save()

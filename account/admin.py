@@ -13,7 +13,7 @@ import time
 class UserAdmin(HousingAdmin):
     list_display = ['username', 'email', 'phone', 'nid', 'passport', 'present_address', 'permanent_address',
                     'birthday', 'married_status', 'occupation', 'occupation_institution', 'religion',
-                    'education_qualification', 'account_complete_status']
+                    'education_qualification']
     search_fields = ['username__icontains', 'email__icontains']
 
     def reset_password(self, request, queryset):
