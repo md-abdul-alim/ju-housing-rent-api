@@ -58,40 +58,50 @@ class ProfileAPI(APIView):
     def put(self, request, format=None):
         user = self.get_object(request.user.pk)
 
-        request.data['role'] = 'avoid field value'
-        if request.data['password'] == '' and request.data['password2'] == '':
-            request.data['password'] = 'avoid field value'
-            request.data['password2'] = 'avoid field value'
-
-        serializer = RegistrationSerializer(user, data=request.data)
-        if serializer.is_valid():
-            if request.user.email == request.data['email'] or not User.objects.filter(email=request.data['email']).exists():
+        if request.user.email == request.data['email'] or not User.objects.filter(email=request.data['email']).exists():
+            if request.data['email'] != "null":
                 user.username = request.data['email']
+            if request.data['email'] != "null":
                 user.email = request.data['email']
+            if request.data['first_name'] != "null":
                 user.first_name = request.data['first_name']
+            if request.data['last_name'] != "null":
                 user.last_name = request.data['last_name']
-                if not (request.data['password'] == '' or request.data['password'] == 'avoid field value'):
-                    user.password = make_password(request.data['password'], salt=None, hasher='default')
+            if not request.data['password'] == '':
+                user.password = make_password(request.data['password'], salt=None, hasher='default')
+            if request.data['phone'] != "null":
                 user.phone = request.data['phone']
+            if request.data['passport'] != "null":
                 user.passport = request.data['passport']
+            if request.data['nid'] != "null":
                 user.nid = request.data['nid']
-                user.birthday = request.data['birthday']
-                if request.data['married_status']:
-                    user.married_status = MarriedStatus.objects.get(id=request.data['married_status'])
+            # if request.data['birthday'] != "null":
+            #     user.birthday = request.data['birthday']
+            if request.data['married_status'] != "null":
+                user.married_status = MarriedStatus.objects.get(id=request.data['married_status'])
+            if request.data['occupation'] != "null":
                 user.occupation = request.data['occupation']
+            if request.data['occupation_institution'] != "null":
                 user.occupation_institution = request.data['occupation_institution']
+            if request.data['education_qualification'] != "null":
                 user.education_qualification = request.data['education_qualification']
-                if request.data['religion']:
-                    user.religion = Religion.objects.get(id=request.data['religion'])
+            if request.data['religion'] != "null":
+                user.religion = Religion.objects.get(id=request.data['religion'])
+            if request.data['present_address'] != "null":
                 user.present_address = request.data['present_address']
+            if request.data['permanent_address'] != "null":
                 user.permanent_address = request.data['permanent_address']
-                user.save()
-                return Response({'success': True}, status=status.HTTP_200_OK)
-            else:
-                msg = {'success': False, 'message': 'This User is already exist.'}
-                return Response(msg, status=status.HTTP_400_BAD_REQUEST)
+            if request.data['nid_font_image'] != "null":
+                user.nid_font_image = request.data['nid_font_image']
+            if request.data['nid_back_image'] != "null":
+                user.nid_back_image = request.data['nid_back_image']
+            user.save()
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        else:
+            msg = {'success': False, 'message': 'This User is already exist.'}
+            return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({'success': False, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            # return Response({'success': False, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         team = self.get_object(pk)

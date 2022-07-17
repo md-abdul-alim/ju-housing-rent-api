@@ -1,7 +1,8 @@
 from django.db import models
 from housing.models import HousingModel
 from django.contrib.auth.models import AbstractUser
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, pre_save
+from django.dispatch import receiver
 
 
 class Religion(HousingModel):
@@ -84,6 +85,8 @@ class OtherMember(HousingModel):
 class User(AbstractUser, HousingModel):
     phone = models.CharField(max_length=11, blank=False, null=True)
     nid = models.IntegerField(blank=False, null=True)
+    nid_font_image = models.ImageField(upload_to="images/", blank=True)
+    nid_back_image = models.ImageField(upload_to="images/", blank=True)
     passport = models.CharField(max_length=100, blank=True, null=True)
     present_address = models.CharField(max_length=100, blank=True, null=True)
     permanent_address = models.CharField(max_length=100, blank=True, null=True)
@@ -141,6 +144,15 @@ def cleaner_pre_delete(sender, instance, *args, **kwargs):
 def driver_pre_delete(sender, instance, *args, **kwargs):
     all_drivers = instance.driver.all()
     all_drivers.delete()
+
+
+@receiver(pre_delete, sender=User)
+def user_old_image_delete(sender, instance, *args, **kwargs):
+    if instance.pk:
+        if instance.nid_font_image:
+            instance.nid_font_image.delete(False)
+        if instance.nid_back_image:
+            instance.nid_back_image.delete(False)
 
 
 pre_delete.connect(emergency_contact_pre_delete, sender=User)
