@@ -86,7 +86,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name'],
             email=validated_data['email'],
             phone=validated_data['phone'],
-            is_active=True
+            is_active=False
         )
 
         user.set_password(validated_data['password'])
@@ -95,9 +95,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if str(get_group) == 'Owner':
             Owner.objects.create(user=user)
             user.owner_status = True
-        else:
+            user.is_active = False
+        elif str(get_group) == 'Renter':
             Renter.objects.create(user=user)
             user.renter_status = True
+            user.is_active = True
 
         user.save()
 

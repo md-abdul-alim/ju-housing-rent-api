@@ -84,7 +84,7 @@ class OtherMember(HousingModel):
 
 class User(AbstractUser, HousingModel):
     phone = models.CharField(max_length=11, blank=False, null=True)
-    nid = models.IntegerField(blank=False, null=True)
+    nid = models.IntegerField(blank=True, null=True)
     nid_font_image = models.ImageField(upload_to="images/", blank=True)
     nid_back_image = models.ImageField(upload_to="images/", blank=True)
     passport = models.CharField(max_length=100, blank=True, null=True)

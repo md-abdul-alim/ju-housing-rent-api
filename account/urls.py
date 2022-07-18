@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from account.api import CustomTokenObtainPairView, ChangePasswordView, UserListAPI, GroupListAPI,\
-    MarriedStatusAPI, ReligionAPI, RenterNidAPI
+    MarriedStatusAPI, ReligionAPI, RenterNidAPI, DashboardAPI
 from account.views import ProfileAPI, ProfileFamilyMember, ProfileEmergencyContact, ProfileOtherMember, Registration
 
 urlpatterns = [
@@ -34,4 +34,6 @@ urlpatterns = [
     path('profile/other/member/delete/', ProfileOtherMember.as_view()),
 
     path('renter/nid/list/', RenterNidAPI.as_view()),
+    path('dashboard/', DashboardAPI.as_view())
+
 ]
