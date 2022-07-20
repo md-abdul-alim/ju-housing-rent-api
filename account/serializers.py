@@ -152,5 +152,5 @@ class OtherMemberSerializer(ModelSerializer):
 class RenterNidSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'nid')
+        fields = ('id', 'nid', 'nid_font_image', 'nid_back_image')
 
